@@ -17,15 +17,17 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up SonarCloud
-        uses: sonarsource/sonarcloud-github-action@v2  # Używamy stabilnej wersji
+        uses: sonarsource/sonarcloud-github-action@v2
         with:
-          organization: collab-timekit  # Zmienna organizacji w SonarCloud
-          token: ${{ secrets.SONAR_TOKEN }}  # Token przekazywany przez sekrety organizacji
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORGANIZATION: collab-timekit
 
-      - name: SonarCloud Scan
+      - name: sonar_scan
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=collab-timekit
-            -Dsonar.organization=collab-timekit
-            -Dsonar.sources=.
-            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.projectKey=collab-timekit \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
